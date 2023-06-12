@@ -50,35 +50,43 @@ let cart = []
   - if the product is not already in the cart, add it to the cart
 */
 function addProductToCart(productId) {
-//addProductToCart should get the correct product based on the productId 
-  let curProduct = products.find(product => product.productId === productId);
-  
-  if (curProduct){
-    const cartItem = cart.find(item => item.productId === productId);
-    if (cartItem){
-      cartItem.quantity++;
-    }else{
-      cart.push({ ...curProduct, quantity: 1 }); 
+  // Find the product based on the productId
+  let product = products.find(product => product.productId === productId);
+  if (product) {
+    // Check if the product is already in the cart
+    let cartProduct = cart.find(item => item.productId === productId);
+
+    if (cartProduct) {
+      // Product is already in the cart, so increase its quantity in the cart
+      cartProduct.quantity++;
+    } else {
+      // Product is not in the cart, so add it to the cart
+      // let newItem = { ...product, quantity: 1 }
+      // cart.push(newItem)
+      cart.push(product);
+      let cartProduct = cart.find(item => item.productId === productId);
+      cartProduct.quantity++;
+    }
+
+    console.log(`${product.name} added to the cart`,cart);
+  } else {
+    console.log('Product not found'),products;
   }
 }
-}
+
+
 
 /* Create a function named increaseQuantity that takes in the productId as an argument
   - increaseQuantity should get the correct product based on the productId
   - increaseQuantity should then increase the product's quantity
 */
-function increaseQuantity(productId) {
-  // Find the product based on the productId
-  const cartItem = cart.find(item => item.productId === productId);
-
-  // If product exists, increase its quantity
-  if (cartItem) {
-    cartItem.quantity++;
-    console.log(`Quantity of ${cartItem.name} increased to ${cartItem.quantity}`);
-  } else {
-    console.log('cartItem not found');
-  }
+function increaseQuantity(productId){
+  let cartProduct = cart.find(item => item.productId === productId);
+  if (cartProduct){
+    cartProduct.quantity++;
+  } 
 }
+
 
 /* Create a function named decreaseQuantity that takes in the productId as an argument
   - decreaseQuantity should get the correct product based on the productId
@@ -86,48 +94,78 @@ function increaseQuantity(productId) {
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
 function decreaseQuantity(productId){
-  
-  const cartItem = cart.find(item => item.productId === productId);
-  console.log(cartItem)
-  const cartItemIndex = cart.findIndex(product => product.productId === productId);
-
-  // // If product exists, decrease its quantity
-  // if (productIndex !== -1) {
-  //   const product = products[productIndex];
-
-  //   if (product.quantity > 0) {
-  //     product.quantity--;
-
-  //     if (product.quantity === 0) {
-  //       products.splice(productIndex, 1);
-  //       console.log(`Product ${product.name} removed from the cart`);
-  //     } else {
-  //       console.log(`Quantity of ${product.name} decreased to ${product.quantity}`);
-  //     }
-  //   } else {
-  //     console.log(`Product ${product.name} is already out of stock`);
-  //   }
-  // } else {
-  //   console.log('Product not found');
-  // }
+  const cartIndex = cart.findIndex(item => item.productId === productId);
+  if (cartIndex !== -1){
+    let cartProduct = cart.find(item => item.productId === productId);
+    cartProduct.quantity--;
+    if (cartProduct.quantity === 0){
+      cart.splice(cartIndex,1)
+    }
+  }
 }
+
 /* Create a function named removeProductFromCart that takes in the productId as an argument
   - removeProductFromCart should get the correct product based on the productId
   - removeProductFromCart should update the product quantity to 0
   - removeProductFromCart should remove the product from the cart
 */
-
+function removeProductFromCart(productId){
+  let cartProduct = cart.find(item => item.productId === productId);
+  if (cartProduct){
+    const cartIndex = cart.findIndex(item => item.productId === productId);
+    cartProduct.quantity = 0
+    cart.splice(cartIndex,1)
+  }else{
+    console.log(`${product.name} not in cart`);
+  }
+}
 /* Create a function named cartTotal that has no parameters
   - cartTotal should iterate through the cart to get the total of all products
   - cartTotal should return the sum of the products in the cart
 */
 
-/* Create a function called emptyCart that empties the products from the cart */
+function cartTotal() {
+  let total = 0;
 
+  cart.forEach(item => {
+    total += item.price * item.quantity;
+  });
+
+  return total;
+}
+
+/* Create a function called emptyCart that empties the products from the cart */
+function emptyCart(){
+
+  cart.splice(0, array.length);
+
+  //could use decrease function
+}
 /* Create a function named pay that takes in an amount as an argument
   - pay will return a negative number if there is a remaining balance
   - pay will return a positive number if money should be returned to customer
 */
+function pay(amount) {
+  if (amount < 0) {
+    console.log("Invalid amount. Please provide a positive number.");
+    return 0;
+  }
+
+  let total = cartTotal();
+  let balance = amount - total;
+
+  switch (true) {
+    case balance < 0:
+      console.log(`Remaining balance: $${Math.abs(balance)}`);
+      return balance;
+    case balance > 0:
+      console.log(`Amount to be returned: $${balance}`);
+      return balance;
+    default:
+      console.log("Payment is exact. No balance or return needed.");
+      return 0;
+  }
+}
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
 
@@ -142,12 +180,12 @@ module.exports = {
    products,
    cart,
    addProductToCart,
-   increaseQuantity,
-  decreaseQuantity}
-  //  removeProductFromCart,
-  //  cartTotal,
-  //  pay, 
-  //  emptyCart,
+  increaseQuantity,
+  decreaseQuantity,
+  removeProductFromCart,
+  cartTotal,
+  pay, 
+  emptyCart}
    /* Uncomment the following line if completing the currency converter bonus */
    // currencop
 // }
