@@ -11,6 +11,7 @@
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
     "jest": "^27.5.1",
-    "live-server": "^1.2.1"
+    "live-server": "^1.2.1",
+    "node": "^20.2.0"
   }
 }
