@@ -23,7 +23,7 @@ let product1 = {
   price:4.00,
   quantity:0,
   productId:1,
-  image: "src/images/cherry.jpg"
+  image: "./images/cherry.jpg"
 };
 
 let product2 = {
@@ -31,7 +31,7 @@ let product2 = {
   price: 5.00,
   quantity:0,
   productId:2,
-  image: "src/images/strawberry.jpg"
+  image: "./images/strawberry.jpg"
 };
 
 let product3 = {
@@ -39,7 +39,7 @@ let product3 = {
   price:10.00,
   quantity:0,
   productId:3,
-  image: "src/images/orange.jpg"
+  image: "./images/orange.jpg"
 };
 products.push(product1,product2,product3)
 
@@ -62,10 +62,6 @@ function addProductToCart(productId) {
       let cartProduct = cart.find(item => item.productId === productId);
       cartProduct.quantity++;
     }
-
-    console.log(`${product.name} added to the cart`,cart);
-  } else {
-    console.log('Product not found'),products;
   }
 }
 
@@ -107,8 +103,6 @@ function removeProductFromCart(productId){
     const cartIndex = cart.findIndex(item => item.productId === productId);
     cartProduct.quantity = 0
     cart.splice(cartIndex,1)
-  }else{
-    console.log(`${product.name} not in cart`);
   }
 }
 
@@ -135,33 +129,10 @@ function emptyCart(){
   - pay will return a negative number if there is a remaining balance
   - pay will return a positive number if money should be returned to customer
 */
-let balance = 0
 function pay(amount) {
-
-  if (amount < 0) {
-    console.log("Invalid amount. Please provide a non-negative number.");
-    return 0;
-  }
-
-  let total = cartTotal();
-
-  if (amount > balance){
-    balance = amount - total
-  }else{
-  balance = total - amount;
-  }
-  
-  switch (true) {
-    case balance < 0:
-      console.log(`Remaining balance: $${Math.abs(balance)}`);
-      return balance;
-    case balance > 0:
-      console.log(`Amount to be returned: $${Math.abs(balance)}`);
-      return balance;
-    default:
-      console.log("Payment is exact. No balance or return needed.");
-      return 0;
-  }
+  let totalPaid = 0
+  totalPaid += amount
+  return totalPaid - cartTotal()
 }
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
@@ -174,9 +145,9 @@ function pay(amount) {
 */
 
 module.exports = {
-   products,
-   cart,
-   addProductToCart,
+  products,
+  cart,
+  addProductToCart,
   increaseQuantity,
   decreaseQuantity,
   removeProductFromCart,
