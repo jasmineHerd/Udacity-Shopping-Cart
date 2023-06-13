@@ -42,27 +42,22 @@ let product3 = {
   image: "src/images/orange.jpg"
 };
 products.push(product1,product2,product3)
+
 /* Declare an empty array named cart to hold the items in the cart */
 let cart = []
+
 /* Create a function named addProductToCart that takes in the product productId as an argument
   - addProductToCart should get the correct product based on the productId
   - addProductToCart should then increase the product's quantity
   - if the product is not already in the cart, add it to the cart
 */
 function addProductToCart(productId) {
-  // Find the product based on the productId
   let product = products.find(product => product.productId === productId);
   if (product) {
-    // Check if the product is already in the cart
     let cartProduct = cart.find(item => item.productId === productId);
-
     if (cartProduct) {
-      // Product is already in the cart, so increase its quantity in the cart
       cartProduct.quantity++;
     } else {
-      // Product is not in the cart, so add it to the cart
-      // let newItem = { ...product, quantity: 1 }
-      // cart.push(newItem)
       cart.push(product);
       let cartProduct = cart.find(item => item.productId === productId);
       cartProduct.quantity++;
@@ -74,8 +69,6 @@ function addProductToCart(productId) {
   }
 }
 
-
-
 /* Create a function named increaseQuantity that takes in the productId as an argument
   - increaseQuantity should get the correct product based on the productId
   - increaseQuantity should then increase the product's quantity
@@ -86,7 +79,6 @@ function increaseQuantity(productId){
     cartProduct.quantity++;
   } 
 }
-
 
 /* Create a function named decreaseQuantity that takes in the productId as an argument
   - decreaseQuantity should get the correct product based on the productId
@@ -119,47 +111,52 @@ function removeProductFromCart(productId){
     console.log(`${product.name} not in cart`);
   }
 }
+
 /* Create a function named cartTotal that has no parameters
   - cartTotal should iterate through the cart to get the total of all products
   - cartTotal should return the sum of the products in the cart
 */
-
 function cartTotal() {
   let total = 0;
-
+  
   cart.forEach(item => {
     total += item.price * item.quantity;
   });
-
+  
   return total;
 }
 
 /* Create a function called emptyCart that empties the products from the cart */
 function emptyCart(){
-
   cart.splice(0, array.length);
-
-  //could use decrease function
 }
+
 /* Create a function named pay that takes in an amount as an argument
   - pay will return a negative number if there is a remaining balance
   - pay will return a positive number if money should be returned to customer
 */
+let balance = 0
 function pay(amount) {
+
   if (amount < 0) {
-    console.log("Invalid amount. Please provide a positive number.");
+    console.log("Invalid amount. Please provide a non-negative number.");
     return 0;
   }
 
   let total = cartTotal();
-  let balance = amount - total;
 
+  if (amount > balance){
+    balance = amount - total
+  }else{
+  balance = total - amount;
+  }
+  
   switch (true) {
     case balance < 0:
       console.log(`Remaining balance: $${Math.abs(balance)}`);
       return balance;
     case balance > 0:
-      console.log(`Amount to be returned: $${balance}`);
+      console.log(`Amount to be returned: $${Math.abs(balance)}`);
       return balance;
     default:
       console.log("Payment is exact. No balance or return needed.");
@@ -168,7 +165,7 @@ function pay(amount) {
 }
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
-
+//Split payments so that if total is not paid amount is updated instead of reset
 
 /* The following is for running unit tests. 
    To fully complete this project, it is expected that all tests pass.
